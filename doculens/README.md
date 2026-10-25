@@ -1,6 +1,6 @@
 # DOCULENS
 
-사용법 영상: [롱폼](https://www.youtube.com/watch?v=M3cKhZBobt0) · [쇼츠](https://www.youtube.com/shorts/fkdBdLUzH8E)
+사용법 영상: [롱폼](https://www.youtube.com/watch?v=M3cKhZBobt0) · [쇼츠](https://www.youtube.com/shorts/jsNz8b4Jkoo)
 
 PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보내는 업무 도구입니다.
 

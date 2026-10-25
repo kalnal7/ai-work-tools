@@ -1,0 +1,25 @@
+{
+  "name": "SELLERSHOT",
+  "problem": "온라인 판매자가 낮은 별점 리뷰를 손으로 분류하면서 반복되는 불만과 우선 확인 항목을 파악하기 어렵습니다.",
+  "users": ["온라인 판매자", "상품 운영 담당자"],
+  "flow": [
+    "CSV·XLSX·TXT·JSON 리뷰 파일을 넣거나 본문을 붙여 넣습니다.",
+    "불만 유형별 건수와 원문, 근거 키워드를 확인하고 필요한 유형을 수정합니다.",
+    "엑셀 보고서와 유형별 답글 초안을 받습니다."
+  ],
+  "forbidden_claims": ["분석 속도 보장", "분류 정확도 보장", "매출·수익 보장"],
+  "custom_scope": {
+    "public": ["파일 넣기", "로컬 키워드 분류", "분류 사전 편집", "엑셀 보고서", "답글 템플릿"],
+    "custom": ["쇼핑몰 API 자동 수집", "업종별 분류 사전 구축", "사내 대시보드 연동", "답글 자동 게시"]
+  },
+  "release": {
+    "include": ["app.py", "visual_identity.py", "visual_identity.json", "categories.json", ".streamlit/config.toml", "static/fonts/*", "assets/screenshots/*.png", "requirements.txt", "README.md", "THIRD_PARTY_LICENSES.md", "LICENSE", "product.json", "test_sellershot.py", "run.cmd", "run.sh"],
+    "exclude": ["output/**", "_work/**", "_scratch/**", ".venv/**", "__pycache__/**", ".pytest_cache/**", "*.mp4", "*.mov", "*.wav", "*.mp3", "*.srt", "produce_*", "record_*", "assemble_*", "generate_audio*", "finalize_*", "write_manifest*", "video_*"],
+    "folder": "sellershot",
+    "public_folder": "sellershot",
+    "repo": "maryworks/ai-work-tools",
+    "license": "MIT + Commons Clause",
+    "open_source": false,
+    "contact_email": "kenlauhel8@gmail.com"
+  }
+}

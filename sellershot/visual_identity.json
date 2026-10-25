@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "preset": "COMMERCIAL_EDITORIAL_WORKBENCH_V2",
+  "locked": true,
+  "identity": {
+    "product": "SELLERSHOT",
+    "series": "업무를 바꾸는 도구",
+    "descriptor": "리뷰 분석",
+    "byline": "직접 만든 도구 · 실제 실행 화면"
+  },
+  "palette": {
+    "background": "#F9F9F8",
+    "toolbar": "#F1F0EF",
+    "surface": "#FDFDFC",
+    "raised": "#E9E8E6",
+    "border": "#CFCECA",
+    "text": "#21201C",
+    "muted": "#63635E",
+    "accent": "#9C3D2E",
+    "accent_text": "#FDFDFC",
+    "success": "#426149",
+    "paper": "#FDFDFC"
+  },
+  "type": {
+    "ui": "SUIT",
+    "korean": "SUIT",
+    "mono": "Consolas"
+  },
+  "geometry": {
+    "corner_radius": 4,
+    "line_width": 2,
+    "app_max_width": 1480,
+    "short_title_rows": 2,
+    "short_title_safe_max_chars": 18,
+    "long_title_safe_max_chars": 34
+  },
+  "rules": {
+    "camera": "LOCKED",
+    "transitions": "HARD_CUT_ONLY",
+    "motion_graphics": false,
+    "style_randomization": false,
+    "max_accents": 1,
+    "avoid_gradient": true,
+    "avoid_glassmorphism": true,
+    "avoid_pills": true,
+    "use_original_product_capture": true
+  }
+}
