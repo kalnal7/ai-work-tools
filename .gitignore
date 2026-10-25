@@ -7,4 +7,9 @@ output/
 _work/
 *.py[cod]
 doculens/tools/tessdata/
+doculens/tools/tesseract/
+doculens/tools/poppler/
+doculens/dist/
+doculens/build/
+doculens/*.spec
 release_gate.json

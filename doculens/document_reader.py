@@ -22,6 +22,21 @@ class DocumentText(str):
 
 
 def find_tool(name):
+    # Prefer the portable, release-bundled tools so installed system versions
+    # cannot silently replace the tested OCR/PDF engines.
+    bundled = ROOT / "tools"
+    candidates = {
+        "tesseract": (bundled / "tesseract" / "tesseract.exe",),
+        "pdfinfo": (bundled / "poppler" / "Library" / "bin" / "pdfinfo.exe",
+                    bundled / "poppler" / "bin" / "pdfinfo.exe"),
+        "pdftotext": (bundled / "poppler" / "Library" / "bin" / "pdftotext.exe",
+                      bundled / "poppler" / "bin" / "pdftotext.exe"),
+        "pdftoppm": (bundled / "poppler" / "Library" / "bin" / "pdftoppm.exe",
+                     bundled / "poppler" / "bin" / "pdftoppm.exe"),
+    }
+    for path in candidates.get(name, ()):
+        if path.is_file():
+            return str(path)
     found = shutil.which(name)
     if found:
         return found

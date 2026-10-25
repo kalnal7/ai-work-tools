@@ -1,0 +1,40 @@
+{
+  "name": "DOCULENS",
+  "release": {
+    "download_url": "https://github.com/maryworks/ai-work-tools/releases/tag/doculens-v1.0.0",
+    "build": {
+      "entry": "app.py",
+      "name": "DOCULENS",
+      "version": "1.0.0",
+      "include_data": [
+        "app.py",
+        "document_reader.py",
+        "invoice_parser.py",
+        "product_workflow.py",
+        "visual_identity.py",
+        "visual_identity.json",
+        "assets",
+        "static",
+        "tools/tessdata/kor.traineddata",
+        "tools/tessdata/eng.traineddata",
+        "tools/tesseract",
+        "tools/poppler",
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.md",
+        "사용법.txt"
+      ],
+      "model_sha256": {
+        "kor.traineddata": "f888d4038348a0c3d25151e7f452bda0d74ca275b18cab146798bcbb94084fff",
+        "eng.traineddata": "8280aed0782fe27257a68ea10fe7ef324ca0f8d85bd2fd145d1c2b560bcb66ba"
+      },
+      "runtime": {
+        "tesseract_version": "5.4.0.20240606",
+        "tesseract_url": "https://github.com/UB-Mannheim/tesseract/releases/download/v5.4.0.20240606/tesseract-ocr-w64-setup-5.4.0.20240606.exe",
+        "tesseract_sha256": "c885fff6998e0608ba4bb8ab51436e1c6775c2bafc2559a19b423e18678b60c9",
+        "poppler_version": "26.09.0-0",
+        "poppler_url": "https://github.com/oschwartz10612/poppler-windows/releases/download/v26.09.0-0/Release-26.09.0-0.zip",
+        "poppler_sha256": "7a6f256a0ddf7536182246a5733331bf4677cbcc34f4663774947ad34556c8d0"
+      }
+    }
+  }
+}

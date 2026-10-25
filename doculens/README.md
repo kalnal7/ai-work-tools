@@ -12,6 +12,11 @@ PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보
 
 ## 설치
 
+**가장 쉬운 방법: [Windows 실행 파일](https://github.com/maryworks/ai-work-tools/releases/tag/doculens-v1.0.0)**
+
+ZIP 압축을 푼 뒤 `DOCULENS.exe`를 실행하면 브라우저에서 열립니다. 끌 때는 함께 열린 작은 콘솔 창을 닫거나 `Ctrl+C`를 누르세요.
+Windows SmartScreen이 표시되면 `추가 정보`를 누른 뒤 `실행`을 선택하세요.
+
 1. Python 3.10 이상과 Tesseract OCR 엔진, Poppler를 설치합니다.
 2. `python -m venv .venv`를 실행하고 가상환경을 활성화합니다.
 3. `python -m pip install -r requirements.txt`를 실행합니다.
