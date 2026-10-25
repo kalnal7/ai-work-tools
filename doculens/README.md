@@ -34,4 +34,4 @@ PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보
 
 ## 라이선스
 
-DOCULENS는 MIT 라이선스로 배포됩니다. 저장소 루트의 `LICENSE`와 이 폴더의 `THIRD_PARTY_LICENSES.md`를 확인하세요.
+DOCULENS는 MIT 라이선스로 배포됩니다(출처: https://github.com/maryworks/ai-work-tools). 저장소 루트의 `LICENSE`와 이 폴더의 `THIRD_PARTY_LICENSES.md`를 확인하세요.
