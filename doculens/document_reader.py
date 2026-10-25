@@ -65,7 +65,12 @@ def model_directory():
     precise = ROOT / "tools" / "tessdata_best"
     if all((precise / (language + ".traineddata")).is_file() for language in ("kor", "eng")):
         return precise
-    return ROOT / "tools" / "tessdata"
+    bundled = ROOT / "tools" / "tessdata"
+    return bundled if bundled.is_dir() else None
+
+
+def _model_name(directory):
+    return directory.name if directory else None
 
 
 def _ocr_page(image):
@@ -75,8 +80,12 @@ def _ocr_page(image):
     with _workspace_temp() as folder:
         path = Path(folder) / "page.png"
         ImageOps.exif_transpose(image).convert("RGB").save(path)
-        return _run([engine, str(path), "stdout", "--tessdata-dir", str(model_directory()),
-                     "-l", "kor+eng", "--oem", "1", "--psm", "6"], timeout=90).strip()
+        arguments = [engine, str(path), "stdout"]
+        directory = model_directory()
+        if directory:
+            arguments.extend(["--tessdata-dir", str(directory)])
+        arguments.extend(["-l", "kor+eng", "--oem", "1", "--psm", "6"])
+        return _run(arguments, timeout=90).strip()
 
 
 def ocr_image(data):
@@ -89,7 +98,7 @@ def ocr_image(data):
             source.seek(index)
             texts.append(_ocr_page(source))
     return DocumentText("\n\f\n".join(texts), {
-        "route": "local_ocr", "model": model_directory().name,
+        "route": "local_ocr", "model": _model_name(model_directory()),
         "pages": count, "page_routes": ["local_ocr"] * count})
 
 
@@ -120,7 +129,7 @@ def extract_pdf(data):
             routes.append("local_ocr")
         route = routes[0] if len(set(routes)) == 1 else "mixed_pdf"
         return DocumentText("\n\f\n".join(pages), {
-            "route": route, "model": model_directory().name if "local_ocr" in routes else None,
+            "route": route, "model": _model_name(model_directory()) if "local_ocr" in routes else None,
             "pages": count, "page_routes": routes})
 
 

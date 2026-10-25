@@ -2,6 +2,7 @@
 import json
 import os
 from pathlib import Path
+import re
 import socket
 import subprocess
 import sys
@@ -11,6 +12,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 from playwright.sync_api import sync_playwright, expect
+from document_reader import model_directory
 
 ROOT = Path(__file__).resolve().parent
 
@@ -22,9 +24,15 @@ def workbook_cells(path):
             for cell in sheet.findall(".//{*}sheetData/{*}row/{*}c")}
 
 
+def expect_code_value(page, value):
+    exact = page.get_by_role("code").filter(has_text=re.compile(r"^" + re.escape(value) + r"$"))
+    expect(exact).to_have_count(1, timeout=15000)
+
+
 def test_real_browser_upload_edit_and_reexport(tmp_path):
-    out = ROOT / "output" / "product_revision_20261025"
-    out.mkdir(exist_ok=True)
+    out_name = "e2e" if os.environ.get("CI") else "product_revision_20261025"
+    out = ROOT / "output" / out_name
+    out.mkdir(parents=True, exist_ok=True)
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
@@ -48,8 +56,11 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
         else:
             raise AssertionError("Local server did not start")
         with sync_playwright() as playwright:
-            executable = Path(playwright.chromium.executable_path)
-            browser = playwright.chromium.launch(headless=True, executable_path=str(executable))
+            executable = Path(os.environ.get("DOCULENS_CHROMIUM_EXECUTABLE", ""))
+            launch_options = {"headless": True}
+            if executable.is_file():
+                launch_options["executable_path"] = str(executable)
+            browser = playwright.chromium.launch(**launch_options)
             try:
                 context = browser.new_context(viewport={"width":1600, "height":1000}, locale="ko-KR",
                     accept_downloads=True, record_video_dir=str(out / "recording"))
@@ -70,7 +81,7 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 changed = "복사용지 A4 (검수)"
                 page.get_by_label("수정값", exact=True).fill(changed)
                 page.get_by_role("button", name="값 적용", exact=True).click()
-                expect(page.get_by_role("code")).to_have_text(changed, timeout=15000)
+                expect_code_value(page, changed)
                 with page.expect_download(timeout=20000) as pending:
                     page.get_by_role("button", name="정리한 엑셀 다운로드", exact=True).click()
                 pending.value.save_as(str(tmp_path / "edited.xlsx"))
@@ -78,7 +89,7 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 # Restore the original description; keep only the final, matching workbook.
                 page.get_by_label("수정값", exact=True).fill("복사용지 A4")
                 page.get_by_role("button", name="값 적용", exact=True).click()
-                expect(page.get_by_role("code")).to_have_text("복사용지 A4", timeout=15000)
+                expect_code_value(page, "복사용지 A4")
                 with page.expect_download(timeout=20000) as pending:
                     page.get_by_role("button", name="수정한 엑셀 파일 다운로드", exact=True).click()
                 target = out / "doculens_최종확인.xlsx"
@@ -92,10 +103,10 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 # One-click revert restores the OCR value and the next download carries it.
                 page.get_by_label("수정값", exact=True).fill(changed)
                 page.get_by_role("button", name="값 적용", exact=True).click()
-                expect(page.get_by_role("code")).to_have_text(changed, timeout=15000)
+                expect_code_value(page, changed)
                 expect(page.get_by_text("수정 1건 반영됨")).to_have_count(2, timeout=15000)
                 page.get_by_role("button", name="원래 값으로 되돌리기", exact=True).click()
-                expect(page.get_by_role("code")).to_have_text("복사용지 A4", timeout=15000)
+                expect_code_value(page, "복사용지 A4")
                 expect(page.get_by_text("수정 1건 반영됨")).to_have_count(0, timeout=15000)
                 with page.expect_download(timeout=20000) as pending:
                     page.get_by_role("button", name="정리한 엑셀 다운로드", exact=True).click()
@@ -107,7 +118,8 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 page.screenshot(path=str(out / "program_verified.png"), full_page=True)
                 (out / "execution.json").write_text(json.dumps({
                     "input_kind":"fictional_scan_pdfs", "input_files":[path.name for path in paths],
-                    "ocr_model":"tessdata_best", "item_fields":[final[f"E{row}"] for row in (2, 3, 4)],
+                    "ocr_model":model_directory().name if model_directory() else None,
+                    "item_fields":[final[f"E{row}"] for row in (2, 3, 4)],
                     "total":456500, "vat":41500, "original_preview_visible":True,
                     "top_download_reflects_edit":True, "final_download_matches_original":True,
                     "workbook":str(target)}, ensure_ascii=False, indent=2), encoding="utf-8")

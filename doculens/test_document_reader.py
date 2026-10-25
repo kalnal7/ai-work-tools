@@ -1,4 +1,5 @@
 import io
+from pathlib import Path
 import zlib
 
 import pytest
@@ -57,7 +58,7 @@ def test_real_pdf_page_limit_below_equal_above_and_preview_page_bounds():
 def test_mixed_pdf_reads_the_scanned_sixth_page_instead_of_stopping_at_five():
     image = Image.new("RGB", (1200, 1600), "white")
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype(r"C:\Windows\Fonts\malgun.ttf", 64)
+    font = ImageFont.truetype(str(Path(__file__).parent / "static" / "fonts" / "SUIT-SemiBold.ttf"), 64)
     draw.text((100, 300), "품목: 보관 상자", fill="black", font=font)
     text = reader.extract_pdf(pdf_with_pages(6, image))
     assert "Document page 5" in text

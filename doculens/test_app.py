@@ -104,13 +104,13 @@ def test_xlsx_is_valid_zip_with_workbook_and_rows():
 def test_actual_local_korean_ocr_on_generated_invoice_image(tmp_path):
     if not app._tool("tesseract"):
         pytest.skip("Tesseract OCR is not installed")
-    image = Image.new("RGB", (1600, 1200), "white")
+    image = Image.new("RGB", (1800, 1400), "white")
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype(r"C:\Windows\Fonts\malgun.ttf", 64)
+    font = ImageFont.truetype(str(Path(__file__).parent / "static" / "fonts" / "SUIT-SemiBold.ttf"), 72)
     for i, line in enumerate(["상호명: 다온문구", "사업자번호: 123-45-67890", "작성일자: 2026-10-01",
                               "품목: 복사용지 A4", "공급가액: 120,000원", "부가세: 12,000원",
                               "합계금액: 132,000원"]):
-        draw.text((100, 100 + i * 140), line, fill="black", font=font)
+        draw.text((100, 100 + i * 170), line, fill="black", font=font)
     path = tmp_path / "invoice.png"
     image.save(path)
     text = app.ocr_image(path.read_bytes())
