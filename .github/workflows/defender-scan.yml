@@ -1,0 +1,31 @@
+name: Defender scan of a release asset
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag whose .zip asset is scanned (draft releases included)"
+        required: true
+permissions:
+  contents: write
+jobs:
+  scan:
+    runs-on: windows-latest
+    steps:
+      - name: Download release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download ${{ inputs.tag }} --repo ${{ github.repository }} --pattern "*.zip" --dir asset
+      - name: Extract
+        shell: pwsh
+        run: Expand-Archive asset\*.zip -DestinationPath extracted
+      - name: Update signatures and scan
+        shell: pwsh
+        run: |
+          Update-MpSignature -ErrorAction Continue
+          Get-MpComputerStatus | Select-Object AntivirusEnabled,AntivirusSignatureVersion | Format-List
+          $target = (Resolve-Path extracted).Path
+          & "$env:ProgramFiles\Windows Defender\MpCmdRun.exe" -Scan -ScanType 3 -File $target -DisableRemediation
+          $code = $LASTEXITCODE
+          $hits = Get-MpThreatDetection | Where-Object { $_.Resources -match [regex]::Escape($target) }
+          Write-Host "MpCmdRun exit code: $code; threat detections: $(@($hits).Count)"
+          if ($code -ne 0 -or @($hits).Count -gt 0) { exit 1 }
