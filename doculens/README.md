@@ -1,5 +1,7 @@
 # DOCULENS
 
+사용법 영상: [롱폼](https://www.youtube.com/watch?v=M3cKhZBobt0) · [쇼츠](https://www.youtube.com/shorts/fkdBdLUzH8E)
+
 PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보내는 업무 도구입니다.
 
 ## 화면
@@ -34,4 +36,4 @@ PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보
 
 ## 라이선스
 
-DOCULENS는 MIT 라이선스로 배포됩니다(출처: https://github.com/maryworks/ai-work-tools). 저장소 루트의 `LICENSE`와 이 폴더의 `THIRD_PARTY_LICENSES.md`를 확인하세요.
+DOCULENS는 소스 공개, 판매 금지 라이선스(MIT + Commons Clause)로 배포됩니다(출처: https://github.com/maryworks/ai-work-tools). 개인·회사 업무 사용과 수정·공유는 자유롭고, 판매나 이것을 핵심으로 한 유료 서비스는 허용하지 않습니다. 저장소 루트의 `LICENSE`와 이 폴더의 `THIRD_PARTY_LICENSES.md`를 확인하세요.
