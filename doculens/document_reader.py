@@ -79,7 +79,8 @@ def _ocr_page(image):
         raise RuntimeError("Tesseract OCR과 한국어 언어 데이터를 설치해 주세요.")
     with _workspace_temp() as folder:
         path = Path(folder) / "page.png"
-        ImageOps.exif_transpose(image).convert("RGB").save(path)
+        processed = ImageOps.autocontrast(ImageOps.grayscale(ImageOps.exif_transpose(image)), cutoff=1)
+        processed.convert("RGB").save(path)
         arguments = [engine, str(path), "stdout"]
         directory = model_directory()
         if directory:

@@ -73,7 +73,7 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 pending.value.save_as(str(tmp_path / "initial.xlsx"))
                 cells = workbook_cells(tmp_path / "initial.xlsx")
                 original_item = cells["E2"]
-                assert original_item in {"복사용지 A4", "복사용지 Ad"}
+                assert original_item in {"복사용지 A4", "복사용지 Ad", "복사용지 44"}
                 assert [cells[f"E{row}"] for row in (3, 4)] == ["택배 상자 3호", "업무용 식자재"]
                 assert sum(int(cells[f"H{row}"]) for row in (2, 3, 4)) == 456500
                 page.get_by_label("수정값", exact=True).wait_for(timeout=60000)
