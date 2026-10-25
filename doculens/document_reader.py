@@ -123,7 +123,7 @@ def extract_pdf(data):
                 raise RuntimeError("스캔 PDF를 읽으려면 Poppler의 pdftoppm이 필요합니다.")
             prefix = Path(folder) / "page"
             _run([renderer, "-f", str(index + 1), "-l", str(index + 1), "-singlefile",
-                  "-r", "220", "-png", str(path), str(prefix)])
+                  "-r", "300", "-png", str(path), str(prefix)])
             with Image.open(prefix.with_suffix(".png")) as image:
                 pages[index] = _ocr_page(image)
             routes.append("local_ocr")

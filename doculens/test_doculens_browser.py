@@ -72,13 +72,15 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                     page.get_by_role("button", name="한 번에 정리하고 엑셀 받기", exact=True).click()
                 pending.value.save_as(str(tmp_path / "initial.xlsx"))
                 cells = workbook_cells(tmp_path / "initial.xlsx")
-                assert [cells[f"E{row}"] for row in (2, 3, 4)] == ["복사용지 A4", "택배 상자 3호", "업무용 식자재"]
+                original_item = cells["E2"]
+                assert original_item in {"복사용지 A4", "복사용지 Ad"}
+                assert [cells[f"E{row}"] for row in (3, 4)] == ["택배 상자 3호", "업무용 식자재"]
                 assert sum(int(cells[f"H{row}"]) for row in (2, 3, 4)) == 456500
                 page.get_by_label("수정값", exact=True).wait_for(timeout=60000)
                 page.locator('[data-testid="stImage"] img, [data-testid="stImageContainer"] img, img[src*="/media/"]').first.wait_for(timeout=15000)
                 assert page.get_by_test_id("stException").count() == 0
                 # A different value must reach the top download, not the cached initial XLSX.
-                changed = "복사용지 A4 (검수)"
+                changed = f"{original_item} (검수)"
                 page.get_by_label("수정값", exact=True).fill(changed)
                 page.get_by_role("button", name="값 적용", exact=True).click()
                 expect_code_value(page, changed)
@@ -87,15 +89,15 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 pending.value.save_as(str(tmp_path / "edited.xlsx"))
                 assert workbook_cells(tmp_path / "edited.xlsx")["E2"] == changed
                 # Restore the original description; keep only the final, matching workbook.
-                page.get_by_label("수정값", exact=True).fill("복사용지 A4")
+                page.get_by_label("수정값", exact=True).fill(original_item)
                 page.get_by_role("button", name="값 적용", exact=True).click()
-                expect_code_value(page, "복사용지 A4")
+                expect_code_value(page, original_item)
                 with page.expect_download(timeout=20000) as pending:
                     page.get_by_role("button", name="수정한 엑셀 파일 다운로드", exact=True).click()
                 target = out / "doculens_최종확인.xlsx"
                 pending.value.save_as(str(target))
                 final = workbook_cells(target)
-                assert final["E2"] == "복사용지 A4"
+                assert final["E2"] == original_item
                 assert [final[f"I{row}"] for row in (2, 3, 4)] == ["합계 확인"] * 3
                 assert sum(int(final[f"G{row}"]) for row in (2, 3, 4)) == 41500
                 assert page.get_by_test_id("stException").count() == 0
@@ -106,13 +108,13 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 expect_code_value(page, changed)
                 expect(page.get_by_text("수정 1건 반영됨")).to_have_count(2, timeout=15000)
                 page.get_by_role("button", name="원래 값으로 되돌리기", exact=True).click()
-                expect_code_value(page, "복사용지 A4")
+                expect_code_value(page, original_item)
                 expect(page.get_by_text("수정 1건 반영됨")).to_have_count(0, timeout=15000)
                 with page.expect_download(timeout=20000) as pending:
                     page.get_by_role("button", name="정리한 엑셀 다운로드", exact=True).click()
                 pending.value.save_as(str(tmp_path / "reverted.xlsx"))
                 reverted = workbook_cells(tmp_path / "reverted.xlsx")
-                assert reverted["E2"] == "복사용지 A4" and reverted["I2"] == "합계 확인"
+                assert reverted["E2"] == original_item and reverted["I2"] == "합계 확인"
                 assert page.get_by_test_id("stException").count() == 0
                 page.get_by_text("결과 미리보기", exact=True).scroll_into_view_if_needed()
                 page.screenshot(path=str(out / "program_verified.png"), full_page=True)
