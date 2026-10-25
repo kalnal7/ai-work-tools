@@ -130,7 +130,7 @@ def test_sample_image_pdfs_end_to_end():
     assert [row["공급가액"] for row in rows] == [120000, 85000, 210000]
     assert [row["부가세"] for row in rows] == [12000, 8500, 21000]
     assert [row["합계"] for row in rows] == [132000, 93500, 231000]
-    assert rows[0]["품목"] in {"복사용지 A4", "복사용지 Ad", "복사용지 44"}
+    assert rows[0]["품목"] == "복사용지 A4"
     assert [row["품목"] for row in rows[1:]] == ["택배 상자 3호", "업무용 식자재"]
     assert all(row["확인"] == "합계 확인" for row in rows), rows
     assert all(row["_recognition"]["route"] == "local_ocr" for row in rows)

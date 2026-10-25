@@ -6,4 +6,5 @@ __pycache__/
 output/
 _work/
 *.py[cod]
+doculens/tools/tessdata/
 release_gate.json

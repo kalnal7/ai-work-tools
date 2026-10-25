@@ -12,7 +12,6 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 from playwright.sync_api import sync_playwright, expect
-from document_reader import model_directory
 
 ROOT = Path(__file__).resolve().parent
 
@@ -73,7 +72,7 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 pending.value.save_as(str(tmp_path / "initial.xlsx"))
                 cells = workbook_cells(tmp_path / "initial.xlsx")
                 original_item = cells["E2"]
-                assert original_item in {"복사용지 A4", "복사용지 Ad", "복사용지 44"}
+                assert original_item == "복사용지 A4"
                 assert [cells[f"E{row}"] for row in (3, 4)] == ["택배 상자 3호", "업무용 식자재"]
                 assert sum(int(cells[f"H{row}"]) for row in (2, 3, 4)) == 456500
                 page.get_by_label("수정값", exact=True).wait_for(timeout=60000)
@@ -120,7 +119,7 @@ def test_real_browser_upload_edit_and_reexport(tmp_path):
                 page.screenshot(path=str(out / "program_verified.png"), full_page=True)
                 (out / "execution.json").write_text(json.dumps({
                     "input_kind":"fictional_scan_pdfs", "input_files":[path.name for path in paths],
-                    "ocr_model":model_directory().name if model_directory() else None,
+                    "ocr_model":"tessdata_best",
                     "item_fields":[final[f"E{row}"] for row in (2, 3, 4)],
                     "total":456500, "vat":41500, "original_preview_visible":True,
                     "top_download_reflects_edit":True, "final_download_matches_original":True,

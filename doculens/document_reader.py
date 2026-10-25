@@ -62,15 +62,14 @@ def _pdf_page_count(path):
 
 
 def model_directory():
-    precise = ROOT / "tools" / "tessdata_best"
-    if all((precise / (language + ".traineddata")).is_file() for language in ("kor", "eng")):
-        return precise
-    bundled = ROOT / "tools" / "tessdata"
-    return bundled if bundled.is_dir() else None
+    models = ROOT / "tools" / "tessdata"
+    if all((models / (language + ".traineddata")).is_file() for language in ("kor", "eng")):
+        return models
+    return None
 
 
 def _model_name(directory):
-    return directory.name if directory else None
+    return "tessdata_best" if directory else None
 
 
 def _ocr_page(image):

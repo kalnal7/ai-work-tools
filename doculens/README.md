@@ -10,9 +10,10 @@ PDF·이미지 명세서를 로컬에서 읽고 검토한 뒤 XLSX 표로 내보
 
 ## 설치
 
-1. Python 3.10 이상과 Tesseract OCR(한국어·영어 언어 데이터), Poppler를 설치합니다.
+1. Python 3.10 이상과 Tesseract OCR 엔진, Poppler를 설치합니다.
 2. `python -m venv .venv`를 실행하고 가상환경을 활성화합니다.
 3. `python -m pip install -r requirements.txt`를 실행합니다.
+4. `python setup_models.py`를 실행해 고정된 정밀 한국어·영어 OCR 모델(약 28 MB)을 설치합니다. 모델은 Apache-2.0 라이선스입니다.
 
 ## 사용
 
