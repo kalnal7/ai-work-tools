@@ -13,6 +13,8 @@ import app
 from product_workflow import DownloadJob, input_key, invoice_summary, process_invoices, review_invoice, review_worklist
 
 ROOT = Path(__file__).resolve().parent
+# AppTest defaults to 3 s per script run; a busy machine can exceed that and fail spuriously.
+APPTEST_TIMEOUT = 30
 
 
 def render_review_fixture():
@@ -105,7 +107,7 @@ class ProductWorkflowTests(unittest.TestCase):
 
     def test_repair_form_keeps_invalid_reason_then_updates_same_row_and_xlsx(self):
         from streamlit.testing.v1 import AppTest
-        at = AppTest.from_function(render_review_fixture).run()
+        at = AppTest.from_function(render_review_fixture, default_timeout=APPTEST_TIMEOUT).run()
         self.assertFalse(at.exception)
         document_id = at.session_state["exported_review_rows"][0]["_document_id"]
         next(widget for widget in at.text_input if widget.label == "수정값").set_value("1.2")
@@ -132,7 +134,7 @@ class ProductWorkflowTests(unittest.TestCase):
 
     def test_table_edit_refreshes_review_column_summary_and_download(self):
         from streamlit.testing.v1 import AppTest
-        at = AppTest.from_function(render_review_fixture).run()
+        at = AppTest.from_function(render_review_fixture, default_timeout=APPTEST_TIMEOUT).run()
         self.assertFalse(at.exception)
         at.session_state["workflow_review_table_0"] = {
             "edited_rows":{0:{"합계":110}}, "added_rows":[], "deleted_rows":[]}
