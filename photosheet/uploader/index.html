@@ -1,0 +1,13 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><style>
+*{box-sizing:border-box}body{margin:0;font:15px sans-serif;color:#21201c;background:#fdfdfc}#drop{border:2px dashed #cfceca;border-radius:4px;padding:24px;text-align:center;cursor:pointer}#drop.over{border-color:#9c3d2e;background:#f1f0ef}button{background:#9c3d2e;color:white;border:0;padding:10px 20px;border-radius:4px;cursor:pointer}small{display:block;color:#63635e;margin:12px}#error{color:#9c3d2e;margin:10px}#files{position:absolute;width:1px;height:1px;opacity:0}
+</style><div id="drop" data-testid="photo-dropzone"><strong>사진을 여기에 끌어 놓으세요</strong><small>JPG·PNG · 최대 200장 · 한 장당 15MB 이하 (1MB = 1,048,576바이트)<br>HEIC 사진은 다음 판에서 지원할 예정입니다.</small><button id="pick" type="button">사진 고르기</button><input id="files" type="file" accept=".jpg,.jpeg,.png" multiple aria-label="사진 고르기"><div id="status"></div></div><div id="error" role="alert"></div><script>
+const send=(type,data={})=>parent.postMessage({isStreamlitMessage:true,type,...data},'*');
+send('streamlit:componentReady',{apiVersion:1});send('streamlit:setFrameHeight',{height:205});
+const drop=document.getElementById('drop'),input=document.getElementById('files'),error=document.getElementById('error'),status=document.getElementById('status');
+document.getElementById('pick').onclick=()=>input.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');load(e.dataTransfer.files)};input.onchange=()=>load(input.files);
+async function load(files){error.textContent='';if(files.length===0){error.textContent='JPG 또는 PNG 사진을 한 장 이상 넣어 주세요.';return}if(files.length>200){error.textContent='사진은 한 번에 200장 이하로 나누어 넣어 주세요.';return}for(const f of files){if(!/\.(jpe?g|png)$/i.test(f.name)){error.textContent='지원하지 않는 형식입니다. JPG 또는 PNG로 바꾸어 넣어 주세요.';return}if(f.size>15*1024*1024){error.textContent='한 장당 15MB 이하로 줄여 다시 넣어 주세요.';return}}
+status.textContent='사진을 읽고 있어요…';try{const value=[];for(const f of files){const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(f)});value.push({name:f.name,data,mtime:f.lastModified/1000})}send('streamlit:setComponentValue',{value,dataType:'json'});status.textContent=files.length+'장 선택됨'}catch(e){error.textContent='사진 파일을 읽지 못했습니다. 파일을 다시 골라 주세요.'}}
+addEventListener('message',e=>{if(e.data.type==='streamlit:render')send('streamlit:setFrameHeight',{height:205})});
+</script></html>

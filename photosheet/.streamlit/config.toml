@@ -1,0 +1,18 @@
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = false
+[server]
+headless = true
+address = "127.0.0.1"
+enableStaticServing = true
+maxUploadSize = 15
+maxMessageSize = 4096
+[browser]
+gatherUsageStats = false
+[theme]
+base = "light"
+primaryColor = "#9C3D2E"
+backgroundColor = "#F9F9F8"
+secondaryBackgroundColor = "#F1F0EF"
+textColor = "#21201C"
+font = "sans serif"
