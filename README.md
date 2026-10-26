@@ -7,7 +7,7 @@ AI로 만든 업무 도구 모음 — 유튜브 영상과 함께 공개합니다
 | 프로그램 | 설명 | 사용법 영상 | 받기 |
 |---|---|---|---|
 | DOCULENS | 명세서 내용을 읽고 원본과 대조해 엑셀 표로 내보내는 로컬 도구 | [롱폼](https://www.youtube.com/watch?v=M3cKhZBobt0) · [쇼츠](https://www.youtube.com/shorts/jsNz8b4Jkoo) | [Windows 실행 파일](https://github.com/maryworks/ai-work-tools/releases/tag/doculens-v1.0.0) · [소스](doculens/) |
-| SELLERSHOT | 낮은 별점 리뷰를 불만 유형별로 모아 원문·근거와 함께 보고 엑셀 보고서로 내보내는 로컬 도구 | 준비 중 | [소스](sellershot/) |
+| SELLERSHOT | 낮은 별점 리뷰를 불만 유형별로 모아 원문·근거와 함께 보고 엑셀 보고서로 내보내는 로컬 도구 | [롱폼](https://www.youtube.com/watch?v=fsBnpFMNCkQ) · [쇼츠](https://www.youtube.com/shorts/Zz4dF1MNmTg) | [소스](sellershot/) |
 
 맞춤 제작 문의는 [GitHub 이슈](https://github.com/maryworks/ai-work-tools/issues/new?template=custom_request.md)에 남기거나 `kenlauhel8@gmail.com`로 보내 주세요.
 
